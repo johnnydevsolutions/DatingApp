@@ -1,0 +1,30 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio files
+*.csproj
+*.user
+*.suo
+*.sln
+*.cache
+*.rsvp
+*.pdb
+*.opensdf
+*.sdf
+
+# JetBrains Rider
+*.rider20*
+
+# .NET Core
+*.csproj.user
+*.dll
+
+# Nuget packages
+packages/
+
+# ReSharper
+_ReSharper.*
+
+# DotCover
+*.dotCover
