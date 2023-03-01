@@ -30,7 +30,7 @@ namespace DatingBack.Controllers
 
             var user = new AppUser
             {
-                Username = registerDto.UserName.ToLower(),
+                UserName = registerDto.UserName.ToLower(),
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmac.Key
             };
@@ -40,7 +40,7 @@ namespace DatingBack.Controllers
 
             return new UserDto
             {
-                Username = user.Username,
+                UserName = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
         }
@@ -48,7 +48,7 @@ namespace DatingBack.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == loginDto.UserName);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
             if (user == null) return Unauthorized("Invalid username");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
@@ -61,7 +61,7 @@ namespace DatingBack.Controllers
 
              return new UserDto
             {
-                Username = user.Username,
+                UserName = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
         }
@@ -69,7 +69,7 @@ namespace DatingBack.Controllers
         private async Task<bool> UserExists(string username)
         {
             return await _context.Users.
-            AnyAsync(x => x.Username == username.ToLower());
+            AnyAsync(x => x.UserName == username.ToLower());
         }
     }
 }

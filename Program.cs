@@ -88,10 +88,19 @@ x.AllowAnyOrigin()
 .AllowAnyHeader()
 );
 
-app.UseAuthentication();
+app.UseRouting();
+
+    app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+
+/* app.UseAuthentication(); */
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
+/* app.MapControllers(); */
 
 app.Run();

@@ -11,6 +11,9 @@ using Microsoft.Extensions.Logging;
 
 namespace DatingBack.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
+
     [Authorize]
     public class UsersController : BaseApiController
     {
@@ -29,6 +32,7 @@ namespace DatingBack.Controllers
             return users;
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
 
         public async Task<ActionResult<AppUser>> GetUser(int id)
