@@ -1,11 +1,9 @@
-using System.Text;
 using DatingBack.Extensions;
 using DatingBack.Interfaces;
+using DatingBack.Middleware;
 using DatingBack.Services;
 using DatingProject.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,7 +71,8 @@ builder.Services.AddScoped<ITokenService, TokenServices>();
                 });
             });
         var app = builder.Build();
-        
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
