@@ -10,5 +10,13 @@ namespace DatingProject.Data
         }
 
         public DbSet<AppUser> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+         modelBuilder.Entity<AppUser>()
+        .Property(x => x.Birthday)
+        .HasColumnType("date");
+    }
+
     }
 }
