@@ -14,9 +14,10 @@ namespace DatingProject.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
          modelBuilder.Entity<AppUser>()
-        .Property(x => x.Birthday)
-        .HasColumnType("date");
-    }
-
+        .Property(e => e.DateOfBirth)
+                .HasConversion(
+                    v => new DateTime(v.Year, v.Month, v.Day), // Convert DateOnly to DateTime
+                    v => DateOnly.FromDateTime(v.Date));       // Convert DateTime to DateOnly
+        }
     }
 }

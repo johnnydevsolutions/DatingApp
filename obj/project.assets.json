@@ -2455,11 +2455,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Work Space\\Dating APP Back\\DatingBack\\DatingProject.csproj",
+      "projectUniqueName": "E:\\Work Space\\Dating APP Back\\back\\DatingProject.csproj",
       "projectName": "DatingProject",
-      "projectPath": "E:\\Work Space\\Dating APP Back\\DatingBack\\DatingProject.csproj",
+      "projectPath": "E:\\Work Space\\Dating APP Back\\back\\DatingProject.csproj",
       "packagesPath": "C:\\Users\\johnn\\.nuget\\packages\\",
-      "outputPath": "E:\\Work Space\\Dating APP Back\\DatingBack\\obj\\",
+      "outputPath": "E:\\Work Space\\Dating APP Back\\back\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
