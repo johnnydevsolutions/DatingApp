@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using back.Data;
 using back.Interfaces;
 using DatingBack.Interfaces;
@@ -22,6 +18,7 @@ namespace DatingBack.Extensions
         services.AddCors();
         services.AddScoped<ITokenService, TokenServices>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         return services;
       }  

@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "1gwO/Tnq+GP5czhTEnYs33lfiLO3Qm1HB2Iw/uzkeTPA9Apr4ygYR930JIUQY2PJDMSHWoevGtnG4jp/FgFfIQ==",
+  "dgSpecHash": "czyDVfwTzqIddKS7C9mbWoGzKQ8mDsv6b6SPemt2o8EYl2RIbKNoC3RYVvNQyt2nzqc3sK/2xcM7rQ44TCjIaw==",
   "success": true,
   "projectFilePath": "E:\\Work Space\\Dating APP Back\\back\\DatingProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\johnn\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\johnn\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\johnn\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\johnn\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\johnn\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
