@@ -349,3 +349,8 @@ E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\refint\DatingProject.dll
 E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\DatingProject.pdb
 E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\DatingProject.genruntimeconfig.cache
 E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\ref\DatingProject.dll
+E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\staticwebassets\msbuild.DatingProject.Microsoft.AspNetCore.StaticWebAssets.props
+E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\staticwebassets\msbuild.build.DatingProject.props
+E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.DatingProject.props
+E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.DatingProject.props
+E:\Work Space\Dating APP Back\back\obj\Debug\net6.0\staticwebassets.pack.json

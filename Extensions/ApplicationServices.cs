@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using back.Data;
+using back.Interfaces;
 using DatingBack.Interfaces;
 using DatingBack.Services;
 using DatingProject.Data;
@@ -19,7 +21,8 @@ namespace DatingBack.Extensions
         });
         services.AddCors();
         services.AddScoped<ITokenService, TokenServices>();
-
+        services.AddScoped<IUserRepository, UserRepository>();
+        
         return services;
       }  
     }

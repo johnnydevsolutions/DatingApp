@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using back.Interfaces;
 using DatingProject.Data;
 using DatingProject.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -17,27 +18,28 @@ namespace DatingBack.Controllers
     [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
+     
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(DataContext context)
-       {
-            _context = context;
+        public UsersController(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult<IEnumerable<AppUser>> GetUsers()
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            var users = _context.Users.ToList();
-            return users;
+            var users = await _userRepository.GetUsersAsync();
+            return Ok(users);
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")]
+        [HttpGet("{username}")]
 
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        public async Task<ActionResult<AppUser>> GetUser(string username)
         {
-            return await _context.Users.FindAsync(id);
+             return await _userRepository.GetUserByUsernameAsync(username);
         }
     }
 }

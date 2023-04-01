@@ -1,10 +1,13 @@
+using System.Text;
 using back.Data;
 using DatingBack.Extensions;
 using DatingBack.Interfaces;
 using DatingBack.Middleware;
 using DatingBack.Services;
 using DatingProject.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,31 +18,32 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 // Extensions
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
-builder.Services.AddDbContext<DataContext>(options =>
+/* builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration
     .GetConnectionString("DefaultConnection")));
 builder.Services.AddCors();
-builder.Services.AddScoped<ITokenService, TokenServices>();
+builder.Services.AddScoped<ITokenService, TokenServices>(); */
 
 //Se quiser usar authorize com o postman
-/* builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// .AddJwtBearer(options =>
+//     {
+//         options.TokenValidationParameters = new TokenValidationParameters
+//         {
+//             ValidateIssuerSigningKey = true,
+//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+//             ValidateIssuer = false,
+//             ValidateAudience = false
+//         };
+//     });
 
-    var app = builder.Build(); */
+    //  var app = builder.Build();
 
     
     //Se quiser usar o authorize com swagger
@@ -72,6 +76,7 @@ builder.Services.AddScoped<ITokenService, TokenServices>();
                 });
             });
         var app = builder.Build();
+        
 
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -90,6 +95,8 @@ x.AllowAnyOrigin()
 
 app.UseRouting();
 
+    
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.UseEndpoints(endpoints =>
@@ -97,11 +104,10 @@ app.UseRouting();
         endpoints.MapControllers();
     });
 
-/* app.UseAuthentication(); */
 
 app.UseHttpsRedirection();
 
-/* app.MapControllers(); */
+app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

@@ -12,26 +12,8 @@ namespace back.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers (DataContext context)
-        /* {
-            if (await context.Users.AnyAsync()) return;
+         public static async Task SeedUsers (DataContext context)
 
-            var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
-
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-            foreach (var user in JsonSerializer.Deserialize<List<AppUser>>(userData, options))
-            {
-                using var hmac = new System.Security.Cryptography.HMACSHA512();
-
-                user.UserName = user.UserName.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
-                user.PasswordSalt = hmac.Key;
-
-                context.Users.Add(user);
-            }
-            await context.SaveChangesAsync();
-        } */
         {
         if (await context.Users.AnyAsync()) return;
 
@@ -53,4 +35,6 @@ namespace back.Data
         await context.SaveChangesAsync();
     }
     }
-}
+
+
+    }
