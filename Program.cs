@@ -19,65 +19,65 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddApplicationServices(builder.Configuration);
+/* builder.Services.AddApplicationServices(builder.Configuration); */
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Extensions
 builder.Services.AddApplicationServices(builder.Configuration);
-builder.Services.AddIdentityServices(builder.Configuration);
+/* builder.Services.AddIdentityServices(builder.Configuration); */
 
-/* builder.Services.AddDbContext<DataContext>(options =>
+builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration
     .GetConnectionString("DefaultConnection")));
 builder.Services.AddCors();
-builder.Services.AddScoped<ITokenService, TokenServices>(); */
+builder.Services.AddScoped<ITokenService, TokenServices>();
 
-//Se quiser usar authorize com o postman
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-// .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuerSigningKey = true,
-//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-//             ValidateIssuer = false,
-//             ValidateAudience = false
-//         };
-//     });
 
-    //  var app = builder.Build();
 
-    
-    //Se quiser usar o authorize com swagger
-      builder.Services.AddSwaggerGen(c =>
-            {       
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DatingApp", Version = "v1" });
- 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-                {
-                Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "JWT Authorization header using the Bearer scheme."
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                {
-                new OpenApiSecurityScheme
-                {
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "DatingApp", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
                 Reference = new OpenApiReference
                 {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
-                },
-                new string[] {}
-                }
-                });
-            });
-        var app = builder.Build();
+            },
+            new string[] {}
+        }
+    });
+});
+
+// Chame `builder.Build()` depois de adicionar todos os serviços
+var app = builder.Build();
+
         
 
 app.UseMiddleware<ExceptionMiddleware>();

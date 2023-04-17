@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using back.DTOs;
+using back.Extensions;
 using back.Interfaces;
 using DatingProject.Data;
 using DatingProject.Entities;
@@ -19,19 +20,22 @@ namespace DatingBack.Controllers
     [Route("api/[controller]")]
 
     [Authorize]
-    public class UsersController : BaseApiController
+    public class UsersController : ControllerBase
     {
      
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IPhotoService _photoService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UsersController(IUserRepository userRepository, IMapper mapper,
+                                IPhotoService photoService)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _photoService = photoService;
         }
 
-        [AllowAnonymous]
+        /* [AllowAnonymous] */
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
@@ -39,7 +43,7 @@ namespace DatingBack.Controllers
             return Ok(users);
         }
 
-        [AllowAnonymous]
+        /* [AllowAnonymous] */
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
@@ -50,8 +54,7 @@ namespace DatingBack.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUserName());
 
             if (user == null) return NotFound();
 
@@ -59,6 +62,33 @@ namespace DatingBack.Controllers
 
             if (await _userRepository.SaveAllAsync()) return NoContent();
             return BadRequest("Failed to update user");
+        }
+
+        [HttpPost("add-photo")]
+
+        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        {
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUserName());
+            if (user == null) return NotFound();
+
+            var result = await _photoService.AddPhotoAsync(file);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId
+            };
+
+            if (user.Photos.Count == 0) photo.IsMain = true;
+
+            user.Photos.Add(photo);
+
+            if (await _userRepository.SaveAllAsync())
+            return _mapper.Map<PhotoDto>(photo);
+
+            return BadRequest("Failed to add photo");
+        
         }
     }
 }

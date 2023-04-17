@@ -1,5 +1,7 @@
 using back.Data;
+using back.Helpers;
 using back.Interfaces;
+using back.Services;
 using DatingBack.Interfaces;
 using DatingBack.Services;
 using DatingProject.Data;
@@ -19,6 +21,8 @@ namespace DatingBack.Extensions
         services.AddScoped<ITokenService, TokenServices>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.Configure <CloudinarySettings>(config.GetSection("CloudinarySettings"));
+        services.AddScoped<IPhotoService, PhotoService>();
         
         return services;
       }  
