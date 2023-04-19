@@ -85,8 +85,10 @@ namespace DatingBack.Controllers
             user.Photos.Add(photo);
 
             if (await _userRepository.SaveAllAsync())
-            return _mapper.Map<PhotoDto>(photo);
-
+            {
+                return  CreatedAtAction(nameof(GetUser), new {username = user.UserName}, _mapper.Map<PhotoDto>(photo));
+            }
+            
             return BadRequest("Failed to add photo");
         
         }
