@@ -1,5 +1,6 @@
 using AutoMapper;
 using back.DTOs;
+using DatingBack.DTOs;
 using DatingBack.Extensions;
 using DatingProject.Entities;
 
@@ -16,6 +17,7 @@ namespace back.Helpers
 
             CreateMap<Photo, PhotoDto>();
             CreateMap<MemberUpdateDto, AppUser>();
+            CreateMap<RegisterDto, AppUser>();
         }
     }
 }
