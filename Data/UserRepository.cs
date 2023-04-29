@@ -1,6 +1,8 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using back.DTOs;
+using back.Extensions;
+using back.Helpers;
 using back.Interfaces;
 using DatingProject.Data;
 using DatingProject.Entities;
@@ -28,12 +30,29 @@ namespace back.Data
         }
         
 
-        public async Task<IEnumerable<MemberDto>> GetMembersAsync()
+        public async Task<PageList<MemberDto>> GetMembersAsync(UserParams userParams)
         {
-            return await _context.Users
-            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            var query = _context.Users
+                        .Where(u => u.UserName != userParams.CurrentUsername)
+                        .Where(u => u.Gender == userParams.Gender);
+                        // .ProjectTo<MemberDto>(_mapper.ConfigurationProvider);
+
+                        var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
+                        var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
+
+                        query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+
+                        return await PageList<MemberDto>.CreateAsync(
+                            query.AsNoTracking().ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
+                            userParams.PageNumber, userParams.PageSize);
+                        
+                        
+           /*  return await PageList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize); */
         }
+        // var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+        // var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+
+
 
         public async Task<AppUser> GetUserByIdAsync(int id)
         {

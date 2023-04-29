@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using back.DTOs;
 using back.Extensions;
+using back.Helpers;
 using back.Interfaces;
 using DatingProject.Data;
 using DatingProject.Entities;
@@ -37,11 +38,21 @@ namespace DatingBack.Controllers
 
         /* [AllowAnonymous] */
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
-        {
-            var users = await _userRepository.GetMembersAsync();
-            return Ok(users);
-        }
+public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
+{
+    var currentUser = await _userRepository.GetUserByUsernameAsync(User.GetUserName());
+    userParams.CurrentUsername = currentUser.UserName;
+
+    if (string.IsNullOrEmpty(userParams.Gender))
+    {
+        userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+    }
+
+    var users = await _userRepository.GetMembersAsync(userParams);
+    Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
+    return Ok(users);
+}
+
 
         /* [AllowAnonymous] */
         [HttpGet("{username}")]
