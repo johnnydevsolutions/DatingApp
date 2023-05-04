@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using back.Entities;
 using DatingBack.Extensions;
 
 namespace DatingProject.Entities
@@ -28,9 +29,12 @@ namespace DatingProject.Entities
         public string? Country { get; set; }
         public List<Photo> Photos { get; set; } = new();
 
-        public int GetAge()
-        {
-            return DateOfBirth.CalculateAge();
-        }
+        public List<UserLike> LikedByUsers { get; set; }
+        public List<UserLike> LikedUsers { get; set; }
+
+        // public int GetAge()
+        // {
+        //     return DateOfBirth.CalculateAge();
+        // }
     }
 }
