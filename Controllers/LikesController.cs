@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using back.DTOs;
 using back.Entities;
 using back.Extensions;
+using back.Helpers;
 using back.Interfaces;
 using DatingBack.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -53,9 +54,12 @@ namespace back.Controllers
       }
     
       [HttpGet]
-      public async Task<ActionResult<IEnumerable<LikeDto>>> GetUserLikes(string predicate)
+      public async Task<ActionResult<PageList<LikeDto>>> GetUserLikes([FromQuery] LikesParams likesParams)
       {
-        var users = await _likesRepository.GetUserLikes(predicate, User.GetUserId());
+        likesParams.UserId = User.GetUserId();
+        var users = await _likesRepository.GetUserLikes(likesParams);
+
+        Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages)); 
         return Ok(users);
       }
     }

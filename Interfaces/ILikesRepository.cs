@@ -1,5 +1,6 @@
 using back.DTOs;
 using back.Entities;
+using back.Helpers;
 using DatingProject.Entities;
 
 namespace back.Interfaces
@@ -8,6 +9,6 @@ namespace back.Interfaces
     {
         Task<UserLike> GetUserLike(int sourceUserId, int TargetUserId);
         Task<AppUser> GetUserWithLikes(int userId);
-        Task<IEnumerable<LikeDto>> GetUserLikes(string predicate, int userId);
+        Task<PageList<LikeDto>> GetUserLikes(LikesParams likesParams);
     }
 }
