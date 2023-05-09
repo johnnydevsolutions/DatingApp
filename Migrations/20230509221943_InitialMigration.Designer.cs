@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230504185918_MessageEntityAdded")]
-    partial class MessageEntityAdded
+    [Migration("20230509221943_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

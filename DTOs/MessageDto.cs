@@ -12,5 +12,7 @@ namespace back.DTOs
         public string Content { get; set; } // this is the message content
         public DateTime? DateRead { get; set; } // this is the date the message was read
         public DateTime MessageSent { get; set; }  // this is the date the message was sent
+        public bool RecipientDeleted { get; set; } // this is the status of the recipient's deletion of the message
+        public bool SenderDeleted { get; set; } // this is the status of the sender's deletion of the message
     }
 }
