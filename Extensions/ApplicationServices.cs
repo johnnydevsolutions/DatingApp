@@ -2,6 +2,7 @@ using back.Data;
 using back.Helpers;
 using back.Interfaces;
 using back.Services;
+using back.SignalR;
 using DatingBack.Interfaces;
 using DatingBack.Services;
 using DatingProject.Data;
@@ -26,6 +27,8 @@ namespace DatingBack.Extensions
         services.AddScoped<LogUserActivity>();
         services.AddScoped<ILikesRepository, LikesRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddSignalR();
+        services.AddSingleton<PresenceTracker>();
         
         return services;
       }  

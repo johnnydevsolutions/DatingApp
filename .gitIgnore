@@ -28,3 +28,5 @@ _ReSharper.*
 
 # DotCover
 *.dotCover
+
+appsettings.json

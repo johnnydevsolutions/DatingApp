@@ -13,6 +13,8 @@ namespace DatingProject.Data
         public DbSet<AppUser> Users { get; set; }
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Connection> Connections { get; set; }
 
 
      protected override void OnModelCreating(ModelBuilder builder)

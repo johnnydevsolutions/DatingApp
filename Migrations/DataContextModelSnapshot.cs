@@ -105,6 +105,35 @@ namespace DatingProject.Migrations
                     b.ToTable("Photos");
                 });
 
+            modelBuilder.Entity("back.Entities.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("GroupName");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("back.Entities.Group", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Groups");
+                });
+
             modelBuilder.Entity("back.Entities.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -178,6 +207,13 @@ namespace DatingProject.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("back.Entities.Connection", b =>
+                {
+                    b.HasOne("back.Entities.Group", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("GroupName");
+                });
+
             modelBuilder.Entity("back.Entities.Message", b =>
                 {
                     b.HasOne("DatingProject.Entities.AppUser", "Recipient")
@@ -227,6 +263,11 @@ namespace DatingProject.Migrations
                     b.Navigation("MessagesSent");
 
                     b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("back.Entities.Group", b =>
+                {
+                    b.Navigation("Connections");
                 });
 #pragma warning restore 612, 618
         }

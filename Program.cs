@@ -1,5 +1,6 @@
 using System.Text;
 using back.Data;
+using back.SignalR;
 using DatingBack.Extensions;
 using DatingBack.Interfaces;
 using DatingBack.Middleware;
@@ -25,6 +26,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Extensions
 builder.Services.AddApplicationServices(builder.Configuration);
 /* builder.Services.AddIdentityServices(builder.Configuration); */
+
+
 
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration
@@ -90,16 +93,21 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(x => 
-x.AllowAnyOrigin()
-.AllowAnyMethod()
+x.AllowAnyMethod()
 .AllowAnyHeader()
-);
+// .AllowAnyOrigin()
+.AllowCredentials()
+.WithOrigins("http://localhost:4200"));
 
 app.UseRouting();
 
     
     app.UseAuthentication();
     app.UseAuthorization();
+
+app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
     app.UseEndpoints(endpoints =>
     {
@@ -109,7 +117,7 @@ app.UseRouting();
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
+
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
@@ -117,6 +125,7 @@ try
 {
     var context = services.GetRequiredService<DataContext>();
     await context.Database.MigrateAsync();
+    await context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [Connections]");
     await Seed.SeedUsers(context);
 }
 catch (Exception ex)

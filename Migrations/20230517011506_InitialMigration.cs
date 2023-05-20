@@ -12,6 +12,17 @@ namespace DatingProject.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Name);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -34,6 +45,24 @@ namespace DatingProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Connections",
+                columns: table => new
+                {
+                    ConnectionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Connections", x => x.ConnectionId);
+                    table.ForeignKey(
+                        name: "FK_Connections_Groups_GroupName",
+                        column: x => x.GroupName,
+                        principalTable: "Groups",
+                        principalColumn: "Name");
                 });
 
             migrationBuilder.CreateTable(
@@ -115,6 +144,11 @@ namespace DatingProject.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Connections_GroupName",
+                table: "Connections",
+                column: "GroupName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Likes_TargetUserId",
                 table: "Likes",
                 column: "TargetUserId");
@@ -139,6 +173,9 @@ namespace DatingProject.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Connections");
+
+            migrationBuilder.DropTable(
                 name: "Likes");
 
             migrationBuilder.DropTable(
@@ -146,6 +183,9 @@ namespace DatingProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "Users");
