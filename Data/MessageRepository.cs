@@ -79,9 +79,8 @@ namespace back.Data
 
         public async Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string recipientUserName)
         {
-            var messages = await _context.Messages
-            .Include(u => u.Sender).ThenInclude(p => p.Photos)
-            .Include(u => u.Recipient).ThenInclude(p => p.Photos)
+            var query = _context.Messages
+           
             .Where(
                 m => m.RecipientUsername == currentUserName && m.RecipientDeleted == false && 
                 m.SenderUsername == recipientUserName ||
@@ -89,9 +88,9 @@ namespace back.Data
                 m.SenderUsername == currentUserName
               )
               .OrderBy(m => m.MessageSent)
-                .ToListAsync();
+              .AsQueryable();
 
-            var unreadMessages = messages.Where(m => m.DateRead == null && m.RecipientUsername == currentUserName).ToList();
+            var unreadMessages = query.Where(m => m.DateRead == null && m.RecipientUsername == currentUserName).ToList();
 
             if (unreadMessages.Any())
             {
@@ -99,9 +98,9 @@ namespace back.Data
                 {
                     message.DateRead = DateTime.UtcNow;
                 }
-                await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
             }
-            return _Mapper.Map<IEnumerable<MessageDto>>(messages);
+            return await query.ProjectTo<MessageDto>(_Mapper.ConfigurationProvider).ToListAsync();
              
         }
 
@@ -110,9 +109,9 @@ namespace back.Data
             _context.Connections.Remove(connection);
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+        // public async Task<bool> SaveAllAsync()
+        // {
+        //     return await _context.SaveChangesAsync() > 0;
+        // }
     }
 }
