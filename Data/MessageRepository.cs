@@ -100,7 +100,16 @@ namespace back.Data
                 }
                  await _context.SaveChangesAsync();
             }
-            return await query.ProjectTo<MessageDto>(_Mapper.ConfigurationProvider).ToListAsync();
+            var messageDtos = _Mapper.Map<List<MessageDto>>(query);
+    foreach(var dto in messageDtos)
+    {
+        dto.MessageSent = DateTime.SpecifyKind(dto.MessageSent, DateTimeKind.Utc);
+        if(dto.DateRead.HasValue)
+            dto.DateRead = DateTime.SpecifyKind(dto.DateRead.Value, DateTimeKind.Utc);
+    }
+
+    return messageDtos;
+           /*  return await query.ProjectTo<MessageDto>(_Mapper.ConfigurationProvider).ToListAsync(); */
              
         }
 
