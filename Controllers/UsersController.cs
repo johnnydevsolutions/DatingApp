@@ -36,19 +36,19 @@ namespace DatingBack.Controllers
 
         /* [AllowAnonymous] */
         [HttpGet]
-public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
-{
-    var gender = await _uow.UserRepository.GetUserGender(User.GetUserName());
-    userParams.CurrentUsername = User.GetUserName();
+        public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
+        {
+            var gender = await _uow.UserRepository.GetUserGender(User.GetUserName());
+            userParams.CurrentUsername = User.GetUserName();
 
-    if (string.IsNullOrEmpty(userParams.Gender))
-        userParams.Gender = gender == "male" ? "female" : "male";
-    
+            if (string.IsNullOrEmpty(userParams.Gender))
+                userParams.Gender = gender == "male" ? "female" : "male";
+            
 
-    var users = await _uow.UserRepository.GetMembersAsync(userParams);
-    Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
-    return Ok(users);
-}
+            var users = await _uow.UserRepository.GetMembersAsync(userParams);
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
+            return Ok(users);
+        }
 
 
         /* [AllowAnonymous] */
@@ -141,5 +141,21 @@ public async Task<ActionResult<PageList<MemberDto>>> GetUsers([FromQuery]UserPar
             if (await _uow.Complete()) return Ok();
             return BadRequest("Failed to delete the photo");
         }
+
+        [HttpDelete("{username}")]
+        public async Task<ActionResult> DeleteUser(string username)
+        {
+            var currentUsername = User.GetUserName();
+            
+            if (username != currentUsername) return Unauthorized();
+
+            var result = await _uow.UserRepository.DeleteUser(username);
+            if (result)
+            {
+                return Ok("User deleted successfully.");
+            }
+            return BadRequest("Failed to delete the user.");
+        }
+
     }
 }

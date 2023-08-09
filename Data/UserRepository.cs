@@ -92,5 +92,16 @@ namespace back.Data
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> DeleteUser(string username)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
     }
 }
