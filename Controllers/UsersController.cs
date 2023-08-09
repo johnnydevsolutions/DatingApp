@@ -152,7 +152,7 @@ namespace DatingBack.Controllers
             var result = await _uow.UserRepository.DeleteUser(username);
             if (result)
             {
-                return Ok("User deleted successfully.");
+                return NoContent();
             }
             return BadRequest("Failed to delete the user.");
         }
